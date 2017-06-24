@@ -51,7 +51,13 @@ module.exports = (app, options) => {
     // Determine the path to look for model a customisation file.
     const basePath = path.join(appRoot.toString(), (options.basePath || '.'))
     const componentsPath = Model.settings.components || `common/models/${kebabCase(Model.modelName)}`
-    const requirePath = path.join(basePath, componentsPath)
+    let requirePath = path.join(basePath, componentsPath)
+
+    // Load the customisations from the componentPackage location
+    if (Model.settings.componentPackage) {
+      debug(Model.settings.componentPackage)
+      requirePath = path.join(__dirname, '..', Model.settings.componentPackage)
+    }
 
     try {
       debug(`Searching for model customisation file at ${requirePath}`)
